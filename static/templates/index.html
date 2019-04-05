@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<style type="text/css">
+			header{
+    		#position: absolute;
+            width: 100%;
+            height: 300px;
+            border: 1px solid black;
+
+			}
+			h1{
+				text-align: center;
+				color: red;
+			}
+			.info{
+			width: 100%;
+            height: 400px;
+            border: 1px solid black;
+            margin-top: 50px;
+			#background-color: red;	
+			}
+			h2{
+				text-align: center;
+				
+			}
+		</style>
+	</head>
+	<body>
+		<header>
+			<h1>公告板</h1>
+			<h3>1)大家对项目感兴趣的可以关注一下<a href="https://github.com/Jiemore/StudentManage">我的GitHub</a></h3>
+			<h3>2)应辅导员要求，更新大家的详细信息。本人承诺不会泄漏各位的个人详细，有责任也有义务保障个人信息安全。</h3>
+			<h3>3)寻求一个UI合作</h3>
+		</header>
+	</body>
+	<div class="info">
+		<h2>{{name}}:认证成功。欢迎一下吧</h2>
+		家庭住址：
+		<form action="/auth" method="post" onsubmit="return Check()">
+		{% csrf_token %}
+		<input type="text" name="home_addr_City" id="home_addr_City" value="" />市 
+		<input type="text" name="home_addr_Qu" id="home_addr_Qu" value="" />区/镇
+		<input type="text" name="home_addr_xx" id="home_addr_xx" value="" />详细地址
+		<br>
+		<br>
+		<br>
+		母亲：
+		<input type="text" name="mphone" placeholder="电话" id="mphone" value="" />
+		<br>
+		父亲：
+		<input type="text" name="fphone" placeholder="电话" id="fphone" value="" />
+		<br />
+		<button type="submit" >确认信息</button>
+		</form>
+	</div>
+</html>
+<script type="text/javascript">
+			function Check(){
+			var home_addr_City = document.getElementById("home_addr_City").value;
+
+			var home_addr_Qu = document.getElementById("home_addr_Qu").value;
+
+			var home_addr_xx = document.getElementById("home_addr_xx").value;
+
+			var mphone=document.getElementById("mphone").value;
+
+			var fphone=document.getElementById("fphone").value;
+
+			
+			if(!Check_home_addr_City(home_addr_City)){
+				alert("请修改标红的信息!");
+				return false;
+			}
+			if(!Check_home_addr_Qu(home_addr_Qu)){
+								alert("请修改标红的信息!");
+				return false;
+			}
+			if(!Check_home_addr_xx(home_addr_xx)){
+								alert("请修改标红的信息!");
+				return false;
+			}
+			if(!Check_phone_f(fphone)){
+								alert("请修改标红的信息!");
+				return false;
+			}
+			if(!Check_phone_m(mphone)){
+								alert("请修改标红的信息!");
+				return false;
+			}
+			return true;
+			} 
+function javaTrim(str) {
+     for (var i=0; (str.charAt(i)==' ') && i<str.length; i++);
+     if (i == str.length) return ''; //whole string is space
+     var newstr = str.substr(i);
+     for (var i=newstr.length-1; newstr.charAt(i)==' ' && i>=0; i--);
+     newstr = newstr.substr(0,i+1);
+     return newstr;
+} 
+function Check_home_addr_Qu(str){
+	var dvuid=document.getElementById("home_addr_Qu");
+				str=str.replace(' ');
+				if(javaTrim(str)==""){
+					
+					dvuid.style.color="#d40000";
+					
+					return false;
+				}
+				dvuid.style.color="black";
+				return true;
+			}
+function Check_home_addr_City(str){
+				
+				var dvuid=document.getElementById("home_addr_City");
+				str=str.replace(' ');
+				if(javaTrim(str)==""){
+					
+					dvuid.style.color="#d40000";
+				
+					return false;
+				}
+				dvuid.style.color="black";
+				return true;
+			}
+function Check_home_addr_xx(str){
+	var dvuid=document.getElementById("home_addr_xx");
+				str=str.replace(' ');
+				if(javaTrim(str)==""){
+					
+					dvuid.style.color="#d40000";
+					
+					return false;
+				}
+				dvuid.style.color="black";
+				return true;
+			}
+function Check_phone_m(str){
+				var reg=/^1(3|4|5|7|8)\d{9}$/;
+				var dv=document.getElementById("mphone");
+				if(!reg.test(str)){
+					
+					dv.style.color="#d40000";
+					//alert("电话号码有误！");
+					return false;
+				}
+				dv.style.color="#000000";
+				return true;
+			}
+
+function Check_phone_f(str){
+				var reg=/^1(3|4|5|7|8)\d{9}$/;
+				var dv=document.getElementById("fphone");
+				if(!reg.test(str)){
+					
+					dv.style.color="#d40000";
+					//alert("电话号码有误！");
+					return false;
+				}
+				dv.style.color="#000000";
+				return true;
+			}
+</script>
