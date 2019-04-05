@@ -115,7 +115,7 @@ def auth(request):
 			user_info_update.objects.create(student_id=st_id,home_addr=home,father_phone=fphone,mother_phone=mphone)
 			return HttpResponse("登记成功!")
 		except:
-			return render(request,'login.html')
+			 return HttpResponse('你已经登记过信息啦~')
 
 	else:
 		return render(request,'login.html')
