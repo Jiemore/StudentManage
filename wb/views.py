@@ -13,6 +13,7 @@ from urllib import request
 #import urllib2
 #import cookielib
 import http.cookiejar
+from .lzzy3x import lzzy
 from bs4 import BeautifulSoup
 
 # Create your views here.
@@ -66,9 +67,10 @@ def signup(request):
 		student_pwd=request.POST.get("st_pwd")
 		post_data["txt_卡学号"]=student_id
 		post_data["txt_密码"]=student_pwd
-		name=Getinfo()
+		name = Auth(student_id,student_pwd)
+
 		if(name!=None):
-			if(user_account.objects.filter(student_id=student_id).count == 0):
+			if(user_account.objects.filter(student_id=student_id).count() == 0):
 				user_account.objects.create(student_id=student_id,student_pwd=student_pwd)
 			request.session['st_id']=student_id
 			return render(request,'index.html',{"name":name["name"]})#-------------------------------------------
@@ -78,20 +80,12 @@ def signup(request):
 		return render(request,'login.html',{'script':'alert','wrong':'账号密码错误'})#HttpResponse('Ex:'+traceback.format_exc())
 
 
-def Getinfo():
-        filename=post_data["txt_卡学号"]
-        cookie = http.cookiejar.MozillaCookieJar('/home/admin/student/StudentManage/login/'+filename)
-        opener = urllib.request.build_opener(request.HTTPCookieProcessor(cookie))
-        opener.addheaders = [('User-agent', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0')]
-        result = opener.open(loginUrl,urllib.parse.urlencode(post_data).encode(encoding='UTF8'))
-        #模拟登录，并把cookie保存到变量
-        #保存cookie到cookie.txt中
-        cookie.save(ignore_discard=True, ignore_expires=True)
-        #利用cookie请求访问另一个url
-        gradeUrl = 'http://jw.lzzy.net/st/student/st_edit.aspx'#'http://jw.lzzy.net/st/student/st_p.aspx'
-        result = opener.open(gradeUrl)
-        ht=result.read().decode('UTF8')
-#        print (ht)
+def Auth(account,password):
+        cookie_filename = account
+        cookie_path = '/home/admin/student/StudentManage/login/'
+        gradeUrl = 'http://jw.lzzy.net/st/student/st_edit.aspx'
+        lz = lzzy(cookie_path+cookie_filename,account,password)
+        ht = lz.get_connect_url(gradeUrl,'UTF8')
         try:
             soup = BeautifulSoup(ht,"html5lib")
             st_data={}
